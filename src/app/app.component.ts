@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
-
+import { Component, EventEmitter } from '@angular/core';
+import {FormBuilder, ReactiveFormsModule, FormsModule, NgControl, FormGroup, Validators } from '@angular/forms';
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'my-app',
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'phonemasking';
+    form: FormGroup;
+   constructor(fb:FormBuilder) {
+    this.form=fb.group({
+      phone:['',[Validators.minLength]]
+    })
+  }
 }

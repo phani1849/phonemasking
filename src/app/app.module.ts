@@ -1,18 +1,19 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
+import { PhoneMaskDirective } from './phone-mask.directive';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatInputModule} from '@angular/material/input';
 @NgModule({
-  declarations: [
-    AppComponent
+  imports:      [ BrowserModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule, MatInputModule ],
+  declarations: [ AppComponent, PhoneMaskDirective ],
+   exports: [
+    PhoneMaskDirective
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap:    [ AppComponent ]
 })
-export class AppModule { }
+export class AppModule { 
+
+}

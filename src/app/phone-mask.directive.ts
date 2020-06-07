@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/fo
 export class PhoneMaskDirective implements OnInit {
   private _phoneControl: AbstractControl;
   private _preValue: string;
-  private _phoneId: string = "tel";
+  private _phoneSelector: string = "tel";
   @Input()
   set phoneControl(control: AbstractControl) {
     this._phoneControl = control;
@@ -16,8 +16,8 @@ export class PhoneMaskDirective implements OnInit {
     this._preValue = value;
   }
   @Input()
-  set phoneId(value: string) {
-    this._phoneId = value;
+  set phoneSelector(value: string) {
+    this._phoneSelector = value;
   }
   constructor(private el: ElementRef, private renderer: Renderer2) { }
   ngOnInit() {
@@ -29,8 +29,8 @@ export class PhoneMaskDirective implements OnInit {
       var lastChar: string = preInputValue.substr(preInputValue.length - 1);
       var newVal = data.replace(/\D/g, '');
 
-      let start = this.renderer.selectRootElement(this._phoneId).selectionStart;
-      let end = this.renderer.selectRootElement(this._phoneId).selectionEnd;
+      let start = this.renderer.selectRootElement(this._phoneSelector).selectionStart;
+      let end = this.renderer.selectRootElement(this._phoneSelector).selectionEnd;
       if (data.length < preInputValue.length) {
         if (preInputValue.length < start) {
           if (lastChar == ')') {
@@ -49,7 +49,7 @@ export class PhoneMaskDirective implements OnInit {
         }
 
         this._phoneControl.setValue(newVal, { emitEvent: false });
-        this.renderer.selectRootElement(this._phoneId).setSelectionRange(start, end);
+        this.renderer.selectRootElement(this._phoneSelector).setSelectionRange(start, end);
       } else {
         var removedD = data.charAt(start);
         if (newVal.length == 0) {
@@ -80,10 +80,10 @@ export class PhoneMaskDirective implements OnInit {
             end = end + 1;
           }
           this._phoneControl.setValue(newVal, { emitEvent: false });
-          this.renderer.selectRootElement(this._phoneId).setSelectionRange(start, end);
+          this.renderer.selectRootElement(this._phoneSelector).setSelectionRange(start, end);
         } else {
           this._phoneControl.setValue(newVal, { emitEvent: false });
-          this.renderer.selectRootElement(this._phoneId).setSelectionRange(start + 2, end + 2);
+          this.renderer.selectRootElement(this._phoneSelector).setSelectionRange(start + 2, end + 2);
         }
       }
     });

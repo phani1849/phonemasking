@@ -4,8 +4,8 @@
       <br /><br /><br /><br /><br /><br />
       <mat-form-field class="example-full-width">
         <mat-label>Phone Number</mat-label>
-        <input matInput id="tel" class="form-control" phoneMask [phoneId]="'#tel'" [preValue]="userForm.value.phone"  [phoneControl]="userForm.controls['phone']" formControlName="phone" minlength="14" maxlength="14" 
-        [ngClass]="(userForm.controls['phone'].invalid)? 'errmsg' : 'validmsg'">
+        <input matInput id="tel" class="form-control" phoneMask [phoneSelector]="'#tel'" [preValue]="userForm.value.phone"  [phoneControl]="userForm.controls['phone']" formControlName="phone" minlength="14" maxlength="14" 
+        [ngClass]="(userForm.controls['phone'].invalid)? 'errmsg' : 'validmsg'" placeholder="(___) __-____">
         <mat-error>In valid</mat-error>
       </mat-form-field>      
     </form>

@@ -1,11 +1,12 @@
 <div class="container mt-5 mb-5 pl-5 ">
   <div class="row">
-    <form [formGroup]="form">
+    <form [formGroup]="userForm">
       <br /><br /><br /><br /><br /><br />
       <mat-form-field class="example-full-width">
         <mat-label>Phone Number</mat-label>
-        <input matInput class="form-control" type="text" appPhoneMask formControlName="phone" id="phone-number" minlength="14">
-        <mat-error>NOOOOOOO</mat-error>
+        <input matInput id="tel" class="form-control" phoneMask [phoneId]="'#tel'" [preValue]="userForm.value.phone"  [phoneControl]="userForm.controls['phone']" formControlName="phone" minlength="14" maxlength="14" 
+        [ngClass]="(userForm.controls['phone'].invalid)? 'errmsg' : 'validmsg'">
+        <mat-error>In valid</mat-error>
       </mat-form-field>      
     </form>
   </div>

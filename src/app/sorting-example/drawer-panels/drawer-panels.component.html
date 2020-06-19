@@ -1,0 +1,13 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let tran of assignableData">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{tran.lable}}
+      </mat-panel-title>
+      <mat-panel-description>
+        Click to Expand
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-drawer-title [gridData] = "tran.data" [sortByValue]="sortByValue" [orderByValue]="orderByValue"></app-drawer-title> 
+  </mat-expansion-panel>  
+</mat-accordion>

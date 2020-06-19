@@ -1,0 +1,8 @@
+<mat-grid-list cols="4" rowHeight="2:1">
+  <mat-grid-tile *ngFor="let tns of gridData | sortBy: orderByValue : sortByValue">
+   Transaction Id :  {{tns.transactionId}}<br />
+   Shares : {{tns.shares}}<br />
+   Possible Matches : {{tns.possiblematches}}<br />
+   Account ID : {{tns.accountid}}<br />
+  </mat-grid-tile>
+</mat-grid-list>

@@ -11,9 +11,13 @@ import { PhoneMaskingExampleComponent } from './phone-masking-example/phone-mask
 import { AppRoutingModule } from './app-routing.module';
 import { DrawerPanelsComponent } from './sorting-example/drawer-panels/drawer-panels.component';
 import { DrawerTitleComponent } from './sorting-example/drawer-title/drawer-title.component';
+import { DatePickerMaskingComponent } from './date-picker-masking/date-picker-masking.component';
+import {NgxMaskModule} from 'ngx-mask'
+
 @NgModule({
   imports: [
     BrowserModule, 
+    NgxMaskModule.forRoot({}),
     FormsModule, 
     ReactiveFormsModule, 
     BrowserAnimationsModule,
@@ -26,7 +30,8 @@ import { DrawerTitleComponent } from './sorting-example/drawer-title/drawer-titl
     SortingExampleComponent,
     PhoneMaskingExampleComponent,
     DrawerPanelsComponent,
-    DrawerTitleComponent
+    DrawerTitleComponent,
+    DatePickerMaskingComponent
   ],  
   bootstrap: [
     AppComponent

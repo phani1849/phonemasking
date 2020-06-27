@@ -16,7 +16,12 @@ import { NgxMaskModule} from 'ngx-mask';
 import { PhoneMaskingDirectiveComponent } from './phone-masking-directive/phone-masking-directive.component';
 import { MaskDirective } from './mask.directive';
 import { FormValidationsComponent } from './form-validations/form-validations.component';
-
+import { MeterialDatatableResizeComponent } from './meterial-datatable-resize/meterial-datatable-resize.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import {CdkTableModule} from '@angular/cdk/table';
+import {CdkTreeModule} from '@angular/cdk/tree';
+import {A11yModule} from '@angular/cdk/a11y';
 
 
 @NgModule({
@@ -27,7 +32,12 @@ import { FormValidationsComponent } from './form-validations/form-validations.co
     ReactiveFormsModule, 
     BrowserAnimationsModule,
     MeterialModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DragDropModule,
+    ScrollingModule,
+    CdkTableModule,
+    CdkTreeModule,
+    A11yModule
   ],
   declarations: [AppComponent, 
     PhoneMaskDirective,
@@ -39,7 +49,8 @@ import { FormValidationsComponent } from './form-validations/form-validations.co
     DatePickerMaskingComponent,
     PhoneMaskingDirectiveComponent,
     MaskDirective,
-    FormValidationsComponent
+    FormValidationsComponent,
+    MeterialDatatableResizeComponent
   ],  
   bootstrap: [
     AppComponent

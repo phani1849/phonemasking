@@ -14,7 +14,9 @@ import { DrawerTitleComponent } from './sorting-example/drawer-title/drawer-titl
 import { DatePickerMaskingComponent } from './date-picker-masking/date-picker-masking.component';
 import { NgxMaskModule} from 'ngx-mask';
 import { PhoneMaskingDirectiveComponent } from './phone-masking-directive/phone-masking-directive.component';
-import { MaskDirective } from './mask.directive'
+import { MaskDirective } from './mask.directive';
+import { FormValidationsComponent } from './form-validations/form-validations.component';
+
 
 
 @NgModule({
@@ -36,7 +38,8 @@ import { MaskDirective } from './mask.directive'
     DrawerTitleComponent,
     DatePickerMaskingComponent,
     PhoneMaskingDirectiveComponent,
-    MaskDirective
+    MaskDirective,
+    FormValidationsComponent
   ],  
   bootstrap: [
     AppComponent

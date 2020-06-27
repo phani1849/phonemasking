@@ -12,7 +12,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { DrawerPanelsComponent } from './sorting-example/drawer-panels/drawer-panels.component';
 import { DrawerTitleComponent } from './sorting-example/drawer-title/drawer-title.component';
 import { DatePickerMaskingComponent } from './date-picker-masking/date-picker-masking.component';
-import {NgxMaskModule} from 'ngx-mask'
+import { NgxMaskModule} from 'ngx-mask';
+import { PhoneMaskingDirectiveComponent } from './phone-masking-directive/phone-masking-directive.component';
+import { MaskDirective } from './mask.directive'
+
 
 @NgModule({
   imports: [
@@ -31,7 +34,9 @@ import {NgxMaskModule} from 'ngx-mask'
     PhoneMaskingExampleComponent,
     DrawerPanelsComponent,
     DrawerTitleComponent,
-    DatePickerMaskingComponent
+    DatePickerMaskingComponent,
+    PhoneMaskingDirectiveComponent,
+    MaskDirective
   ],  
   bootstrap: [
     AppComponent

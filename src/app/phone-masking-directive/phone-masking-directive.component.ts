@@ -7,15 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 @Component({
   selector: 'app-phone-masking-directive',
   templateUrl: './phone-masking-directive.component.html',
-  styleUrls: ['./phone-masking-directive.component.scss'],
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+  styleUrls: ['./phone-masking-directive.component.scss']  
 })
 export class PhoneMaskingDirectiveComponent implements OnInit {
   formGroup: FormGroup;
@@ -25,7 +17,7 @@ export class PhoneMaskingDirectiveComponent implements OnInit {
   }
   createForm() {
     this.formGroup = this.formBuilder.group({
-      'fromDate': [null, [Validators.required]]
+      'fromDate': [new Date(), [Validators.required]]
     });
   }
   onSubmit(values){

@@ -1,4 +1,5 @@
 import { Directive, Input, OnInit, ElementRef, HostListener } from '@angular/core';
+import { isNullOrUndefined } from 'util';
 
 
 @Directive({
@@ -9,6 +10,8 @@ export class MaskDirective implements OnInit {
   @Input('seperator') seperator: string = '';
   private inputElem: HTMLInputElement;
   private _lastMaskedValue = '';
+  private curPosition = 0;
+  private backSpaceState = false;
   _formatToRegExp = {
     '0': /[0-9]/,
     'a': /[a-z]/,
@@ -27,56 +30,48 @@ export class MaskDirective implements OnInit {
       .map(regexStr => regexStr.substr(1, regexStr.length - 2))
       .join('|')
     + ')';
-
+  
   _allFormatsGlobal = this.getAllFormatRegexp('g');
   constructor(private el: ElementRef) { }
 
   ngOnInit() {
     this.inputElem = this.el.nativeElement;
   }
-
+  @HostListener('change')
+  change() {
+    this.initControl();
+  }
+  
   @HostListener('input')
-  onInput() {
+  onInput() {   
+    this.initControl();
+  }
+  @HostListener('keydown.backspace', ['$event'])
+  keydownBackspace(event) {
+    this.backSpaceState = true;    
+  }
+
+  initControl(){
+    this.curPosition = this.el.nativeElement.selectionEnd;
     this.inputElem.value = this._maskValue(this.inputElem.value);
+    if(this.backSpaceState){
+      this.backSpaceState = false;
+    }
+    this.el.nativeElement.selectionStart = this.curPosition;
+    this.el.nativeElement.selectionEnd = this.curPosition;
   }
 
   private _maskValue(val: string): string {
     if (!val || !this.appMask || val === this._lastMaskedValue) {
       return val;
-    }
-
-    if (this.appMask.indexOf("M") || this.appMask.indexOf("D")) {
-      let valueArray = val.split(this.seperator);
-      let maskArray = this.appMask.split(this.seperator);
-      let matDateArr = [];
-      for (let counter = 0; counter < valueArray.length; counter++) {
-        let lastindex = valueArray[counter].length - 1;
-        if (maskArray[counter] === "Mm") {
-          if (parseInt(valueArray[counter]) <= 12) {
-            matDateArr.push(valueArray[counter]);
-          } else {
-            matDateArr.push(valueArray[counter].substr(0, lastindex));
-            return matDateArr.join(this.seperator);
-          }
-        }
-        if (maskArray[counter] === "Dd") {
-          if (parseInt(valueArray[counter]) <= 31) {
-            matDateArr.push(valueArray[counter]);
-          } else {
-            matDateArr.push(valueArray[counter].substr(0, lastindex));
-            return matDateArr.join(this.seperator);
-          }
-        }
-      }
-    }
-
+    }    
+    
     let maskedVal = this._lastMaskedValue =
       this.valueToFormat(
         val,
         this.appMask,
         this._lastMaskedValue.length > val.length,
         this._lastMaskedValue);
-
     return maskedVal;
   }
   valueToFormat(value: string, format: string, goingBack = false, prevValue?: string): string {
@@ -95,7 +90,6 @@ export class MaskDirective implements OnInit {
         formatChar = format[++formatOffset + i];
         formatRegex = this.getFormatRegexp(formatChar);
       }
-
       if (valueChar && formatRegex) {
         if (formatRegex && formatRegex.test(valueChar)) {
           maskedValue += valueChar;
@@ -118,7 +112,42 @@ export class MaskDirective implements OnInit {
         }
       }
     }
+    maskedValue = this.addMaskSlashes(maskedValue);
     return maskedValue;
+  }
+  addMaskSlashes(maskedValue) {
+    if(maskedValue === ""){
+      return "";
+    }
+    maskedValue = maskedValue.replace(/_/,'');
+    if (this.appMask.indexOf("M") || this.appMask.indexOf("D")) {
+      let maskedarr = maskedValue.split('');
+      let addmasks = "";
+      let posstatus = false;
+      for (let i = 0; i < 10; i++) {
+        if (!isNullOrUndefined(maskedarr[i])) {
+          if (maskedarr[i] !== this.seperator) {
+            addmasks += maskedarr[i];
+          } else {
+            posstatus = true;
+            addmasks += this.seperator;
+          }
+        } else if (i != 2 && i != 5) {
+          addmasks += '_';
+        } else {
+          addmasks += this.seperator;
+        }
+      }
+      if (posstatus === true) {
+        if(!this.backSpaceState){
+          this.curPosition = this.curPosition + 1;
+        }              
+        posstatus = false;
+      }
+      return addmasks;
+    } else {
+      return maskedValue;
+    }
   }
   unmaskValue(value: string): string {
     const unmaskedMathes = value.replace(' ', '').match(this._allFormatsGlobal);
@@ -128,6 +157,8 @@ export class MaskDirective implements OnInit {
     return new RegExp(this._allFormatsStr, flags);
   }
   getFormatRegexp(formatChar: string): RegExp | null {
+    // console.log(formatChar);
+    // console.log(this._formatToRegExp[formatChar]);
     return formatChar && this._formatToRegExp[formatChar] ? this._formatToRegExp[formatChar] : null;
   }
 }

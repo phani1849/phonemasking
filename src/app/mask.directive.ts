@@ -1,14 +1,13 @@
-import { Directive, Input, OnInit, ElementRef, HostListener } from '@angular/core';
+import { Directive, Input, OnInit, ElementRef, HostListener, Renderer } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 
 
 @Directive({
   selector: '[appMask]',
 })
-export class MaskDirective implements OnInit {
+export class MaskDirective {
   @Input('appMask') appMask: string;
   @Input('seperator') seperator: string = '';
-  private inputElem: HTMLInputElement;
   private _lastMaskedValue = '';
   private curPosition = 0;
   private backSpaceState = false;
@@ -30,48 +29,77 @@ export class MaskDirective implements OnInit {
       .map(regexStr => regexStr.substr(1, regexStr.length - 2))
       .join('|')
     + ')';
-  
-  _allFormatsGlobal = this.getAllFormatRegexp('g');
-  constructor(private el: ElementRef) { }
 
-  ngOnInit() {
-    this.inputElem = this.el.nativeElement;
-  }
-  @HostListener('change')
-  change() {
-    this.initControl();
-  }
-  
+  _allFormatsGlobal = this.getAllFormatRegexp('g');
+  constructor(private el: ElementRef, private renderer: Renderer) { }
+
   @HostListener('input')
-  onInput() {   
-    this.initControl();
+  onInput() {
+    this.el.nativeElement.value = this._maskValue(this.el.nativeElement.value);
+    this.el.nativeElement.selectionStart = this.curPosition;
+    this.el.nativeElement.selectionEnd = this.curPosition;
   }
   @HostListener('keydown.backspace', ['$event'])
   keydownBackspace(event) {
-    this.backSpaceState = true;    
-  }
-
-  initControl(){
-    this.curPosition = this.el.nativeElement.selectionEnd;
-    this.inputElem.value = this._maskValue(this.inputElem.value);
-    if(this.backSpaceState){
-      this.backSpaceState = false;
-    }
-    this.el.nativeElement.selectionStart = this.curPosition;
-    this.el.nativeElement.selectionEnd = this.curPosition;
+    this.backSpaceState = true;
   }
 
   private _maskValue(val: string): string {
     if (!val || !this.appMask || val === this._lastMaskedValue) {
       return val;
-    }    
-    
+    }
+    val = val.replace(/\D/g, '');
     let maskedVal = this._lastMaskedValue =
       this.valueToFormat(
         val,
         this.appMask,
         this._lastMaskedValue.length > val.length,
         this._lastMaskedValue);
+    if (this.appMask === 'Mm/Dd/YYYY') {
+      let valueArray = val.replace(/\D/g, '');
+      let lenocc = (maskedVal.match(new RegExp("/", "g")) || []).length;
+      let monthOrg = valueArray.substr(0, 2);
+      let month = parseInt(monthOrg);
+      let dateOrg = valueArray.substr(2, 2);
+      let date = parseInt(dateOrg);
+      let yearOrg = valueArray.substr(4, 4);
+      let year = parseInt(yearOrg);
+      let checkDate = 31;
+      if(this.backSpaceState){
+        this.curPosition = this.el.nativeElement.selectionEnd;
+        this.backSpaceState = false;
+      }else{
+        if(valueArray.length === 3 || valueArray.length === 5){
+          this.curPosition = maskedVal.length + 1;
+        }else{
+          this.curPosition = this.el.nativeElement.selectionEnd;
+        }        
+      }
+      if (month > 12) {
+        return '';
+      } else {
+        if (month === 2) {
+          checkDate = 29;
+        } else if (month === 7) {
+          checkDate = 31;
+        } else if ((month % 2) === 0) {
+          checkDate = 30;
+        }
+      }
+      if (date > checkDate) {
+        return monthOrg
+      }
+      if (yearOrg.length === 4 && year < 1900) {
+        return monthOrg + this.seperator + dateOrg;
+      } else {
+        if (month === 2) {
+          let leepyear = (year % 100 === 0) ? (year % 400 === 0) : (year % 4 === 0);
+          if (yearOrg.length === 4 && !leepyear && date === 29) {
+            return monthOrg;
+          }
+        }
+      }
+    }
     return maskedVal;
   }
   valueToFormat(value: string, format: string, goingBack = false, prevValue?: string): string {
@@ -116,35 +144,12 @@ export class MaskDirective implements OnInit {
     return maskedValue;
   }
   addMaskSlashes(maskedValue) {
-    if(maskedValue === ""){
+    if (maskedValue === "") {
       return "";
     }
-    maskedValue = maskedValue.replace(/_/,'');
-    if (this.appMask.indexOf("M") || this.appMask.indexOf("D")) {
-      let maskedarr = maskedValue.split('');
-      let addmasks = "";
-      let posstatus = false;
-      for (let i = 0; i < 10; i++) {
-        if (!isNullOrUndefined(maskedarr[i])) {
-          if (maskedarr[i] !== this.seperator) {
-            addmasks += maskedarr[i];
-          } else {
-            posstatus = true;
-            addmasks += this.seperator;
-          }
-        } else if (i != 2 && i != 5) {
-          addmasks += '_';
-        } else {
-          addmasks += this.seperator;
-        }
-      }
-      if (posstatus === true) {
-        if(!this.backSpaceState){
-          this.curPosition = this.curPosition + 1;
-        }              
-        posstatus = false;
-      }
-      return addmasks;
+    if (this.appMask === 'Mm/Dd/YYYY') {
+      //console.log(maskedValue);
+      return maskedValue;
     } else {
       return maskedValue;
     }
@@ -157,8 +162,6 @@ export class MaskDirective implements OnInit {
     return new RegExp(this._allFormatsStr, flags);
   }
   getFormatRegexp(formatChar: string): RegExp | null {
-    // console.log(formatChar);
-    // console.log(this._formatToRegExp[formatChar]);
     return formatChar && this._formatToRegExp[formatChar] ? this._formatToRegExp[formatChar] : null;
   }
 }

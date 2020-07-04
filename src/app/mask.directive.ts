@@ -35,6 +35,7 @@ export class MaskDirective {
 
   @HostListener('input')
   onInput() {
+    this.curPosition = this.el.nativeElement.selectionEnd;
     this.el.nativeElement.value = this._maskValue(this.el.nativeElement.value);
     this.el.nativeElement.selectionStart = this.curPosition;
     this.el.nativeElement.selectionEnd = this.curPosition;
@@ -155,7 +156,6 @@ export class MaskDirective {
   }
   addMasks(n, dateValue) {
     let dateValueArray = dateValue.split('');
-    console.log(dateValueArray);
     let response = [];
     for (let i = 0; i < n; i++) {
       if (!isNullOrUndefined(dateValueArray[i])) {
@@ -193,9 +193,7 @@ export class MaskDirective {
       } else {
         yearMask = this.addMasks(4, year);
       }
-      console.log(monthMask + this.seperator + dayMask + this.seperator + yearMask);
-      return monthMask + this.seperator + dayMask + this.seperator + yearMask;
-      return maskedValue;
+      return monthMask + this.seperator + dayMask + this.seperator + yearMask;      
     } else {
       return maskedValue;
     }

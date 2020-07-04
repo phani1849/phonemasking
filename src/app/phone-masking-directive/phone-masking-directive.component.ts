@@ -25,7 +25,8 @@ export class PhoneMaskingDirectiveComponent implements OnInit {
   }
   createForm() {
     this.formGroup = this.formBuilder.group({
-      'fromDate': [new Date(), [Validators.required]]
+      'fromDate': [new Date(), [Validators.required]],
+      'accno': ['', [Validators.required]],
     });
   }
   onSubmit(values){

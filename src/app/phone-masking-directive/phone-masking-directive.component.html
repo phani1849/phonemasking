@@ -11,6 +11,10 @@
       <mat-label>ACC NO</mat-label>
       <input matInput formControlName="accno" appMask="00-0000000">
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>ACC NO</mat-label>
+      <input matInput formControlName="phone" appMask="(000)000-0000">
+    </mat-form-field>
     <div class="form-element">
       <button mat-raised-button color="primary" type="submit" class="button" [disabled]="!formGroup.valid">Submit
         Form</button>

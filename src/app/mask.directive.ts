@@ -37,8 +37,10 @@ export class MaskDirective {
   onInput() {
     this.curPosition = this.el.nativeElement.selectionEnd;
     this.el.nativeElement.value = this._maskValue(this.el.nativeElement.value);
-    this.el.nativeElement.selectionStart = this.curPosition;
-    this.el.nativeElement.selectionEnd = this.curPosition;
+    if (this.appMask === 'Mm/Dd/YYYY') {
+      this.el.nativeElement.selectionStart = this.curPosition;
+      this.el.nativeElement.selectionEnd = this.curPosition;
+    }
   }
   @HostListener('keydown.backspace', ['$event'])
   keydownBackspace(event) {
@@ -47,6 +49,9 @@ export class MaskDirective {
 
   private _maskValue(val: string): string {
     if (!val || !this.appMask || val === this._lastMaskedValue) {
+      if (this.appMask === 'Mm/Dd/YYYY') {
+        return this.addMaskSlashes(val);
+      }
       return val;
     }
     val = val.replace(/\D/g, '');
@@ -59,23 +64,19 @@ export class MaskDirective {
 
     if (this.appMask === 'Mm/Dd/YYYY') {
       if (maskedVal != "") {
-        let valueArray = val.replace(/\D/g, '');
-        let lenocc = (maskedVal.match(new RegExp("/", "g")) || []).length;
-        let monthOrg = valueArray.substr(0, 2);
+        let monthOrg = maskedVal.substr(0, 2);
         let month = parseInt(monthOrg);
-        let dateOrg = valueArray.substr(2, 2);
+        let dateOrg = maskedVal.substr(3, 2);
         let date = parseInt(dateOrg);
-        let yearOrg = valueArray.substr(4, 4);
+        let yearOrg = maskedVal.substr(6, 4);
         let year = parseInt(yearOrg);
         let checkDate = 31;
-        if (this.backSpaceState) {
+        if (this.backSpaceState) {          
           this.curPosition = this.el.nativeElement.selectionEnd;
           this.backSpaceState = false;
         } else {
-          if (valueArray.length === 3 || valueArray.length === 5) {
-            this.curPosition = maskedVal.length + 1;
-          } else {
-            this.curPosition = this.el.nativeElement.selectionEnd;
+          if(this.el.nativeElement.selectionEnd === 2 || this.el.nativeElement.selectionEnd === 5){
+            this.curPosition = this.el.nativeElement.selectionEnd + 1;
           }
         }
         if (month > 12) {
@@ -101,11 +102,13 @@ export class MaskDirective {
           if (month === 2) {
             let leepyear = (year % 100 === 0) ? (year % 400 === 0) : (year % 4 === 0);
             if (yearOrg.length === 4 && !leepyear && date === 29) {
-              this.curPosition = 0;
+              this.curPosition = 3;
               return this.addMaskSlashes(monthOrg);
             }
           }
         }
+      }else{
+        this.curPosition = 0;
       }
       maskedVal = this.addMaskSlashes(maskedVal);
       return maskedVal;
@@ -193,7 +196,7 @@ export class MaskDirective {
       } else {
         yearMask = this.addMasks(4, year);
       }
-      return monthMask + this.seperator + dayMask + this.seperator + yearMask;      
+      return monthMask + this.seperator + dayMask + this.seperator + yearMask;
     } else {
       return maskedValue;
     }

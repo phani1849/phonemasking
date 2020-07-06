@@ -1,6 +1,6 @@
 import { NativeDateAdapter } from '@angular/material';
 import * as moment from 'moment';
-
+import { FormControl, Validators } from '@angular/forms';
 export const MY_FORMATS = {
     parse: {
         dateInput: 'MM/DD/YYYY',
@@ -59,8 +59,6 @@ export class MyDateAdapter extends NativeDateAdapter {
 
     }
 }
-
-import { FormControl, Validators } from '@angular/forms';
 export class DateValidator extends Validators {
     static dateValidator(fdValue: FormControl) {
         const date = fdValue.value;

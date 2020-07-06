@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import { MY_FORMATS } from './date-adapter';
+import { MY_FORMATS, MyDateAdapter, DateValidator } from './date-adapter';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MAT_DATEPICKER_VALIDATORS } from '@angular/material';
 
 @Component({
   selector: 'app-phone-masking-directive',
@@ -11,7 +12,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   providers: [   
     {
       provide: DateAdapter,
-      useClass: MomentDateAdapter,
+      useClass: MyDateAdapter,
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
@@ -25,7 +26,7 @@ export class PhoneMaskingDirectiveComponent implements OnInit {
   }
   createForm() {
     this.formGroup = this.formBuilder.group({
-      'fromDate': [new Date(), [Validators.required]],
+      'fromDate': [new Date(), [DateValidator.dateValidator]],
       'accno': ['', [Validators.required]],
       'phone':  ['', [Validators.required]]
     });

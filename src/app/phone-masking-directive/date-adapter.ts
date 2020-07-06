@@ -67,9 +67,8 @@ export class DateValidator extends Validators {
         if (date === null || date === '') {
             return { requiredFromDate: true };
         }
-        let year = date.getFullYear().toString();
-        if (year.length < 4) {
-            console.log(year);
+        let year = date.getFullYear();
+        if (year < 1900) {
             return { requiredFromDate: true };
         }
     }

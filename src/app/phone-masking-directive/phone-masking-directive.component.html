@@ -9,11 +9,11 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>ACC NO</mat-label>
-      <input matInput formControlName="accno" appMask="00-0000000">
+      <input matInput formControlName="accno" inputMask="0000-0000">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>ACC NO</mat-label>
-      <input matInput formControlName="phone" appMask="(000)000-0000">
+      <input matInput formControlName="phone" inputMask="(000)000-0000">
     </mat-form-field>
     <div class="form-element">
       <button mat-raised-button color="primary" type="submit" class="button" [disabled]="!formGroup.valid">Submit

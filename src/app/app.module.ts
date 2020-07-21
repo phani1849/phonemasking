@@ -22,6 +22,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CdkTableModule} from '@angular/cdk/table';
 import {CdkTreeModule} from '@angular/cdk/tree';
 import {A11yModule} from '@angular/cdk/a11y';
+import { InputMaskDirective } from './input-mask/input-mask.directive';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import {A11yModule} from '@angular/cdk/a11y';
     PhoneMaskingDirectiveComponent,
     MaskDirective,
     FormValidationsComponent,
-    MeterialDatatableResizeComponent
+    MeterialDatatableResizeComponent,
+    InputMaskDirective
   ],  
   bootstrap: [
     AppComponent

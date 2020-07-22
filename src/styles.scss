@@ -4,17 +4,39 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .padding40{
     padding: 40px;
 }
-:-ms-input-placeholder { /* IE10–11 */
-    color: #ccc !important;
-    font-weight: 400 !important;
-}
-
-::-ms-input-placeholder { /* Edge */
-    color: #ccc;
-    font-weight: 400;
-}
-
-::placeholder { /* CSS Working Draft */
-    color: #ccc;
-    font-weight: 400;
-}
+.mat-form-field-underline {
+    position: absolute;
+    height: $mat-form-field-underline-height;
+    width: 100%;
+    // Prevents underline from disappearing at lower zoom levels.
+    transform: perspective(1px);
+  
+    &.mat-disabled {
+      background-position: 0;
+      background-color: transparent;
+    }
+  
+    .mat-form-field-ripple {
+      position: absolute;
+      height: $mat-form-field-underline-height;
+      top: 0;
+      left: 0;
+      width: 100%;
+      transform-origin: 50%;
+      transform: scaleX(0.5);
+      visibility: hidden;
+      transition: background-color $swift-ease-in-duration $swift-ease-in-timing-function;
+  
+      .mat-focused & {
+        height: $mat-form-field-underline-height * 2;
+      }
+  
+      .mat-focused &,
+      .mat-form-field-invalid & {
+        visibility: visible;
+        transform: scaleX(1);
+        transition: transform 150ms linear,
+        background-color $swift-ease-in-duration $swift-ease-in-timing-function;
+      }
+    }
+  }

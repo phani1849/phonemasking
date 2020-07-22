@@ -4,3 +4,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .padding40{
     padding: 40px;
 }
+:-ms-input-placeholder { /* IE10–11 */
+    color: #ccc !important;
+    font-weight: 400 !important;
+}
+
+::-ms-input-placeholder { /* Edge */
+    color: #ccc;
+    font-weight: 400;
+}
+
+::placeholder { /* CSS Working Draft */
+    color: #ccc;
+    font-weight: 400;
+}
